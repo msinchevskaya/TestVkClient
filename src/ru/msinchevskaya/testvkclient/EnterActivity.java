@@ -1,26 +1,20 @@
 package ru.msinchevskaya.testvkclient;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import java.util.List;
 
 import ru.msinchevskaya.testvkclient.auth.Account;
 import ru.msinchevskaya.testvkclient.post.PostActivity;
-import ru.msinchevskaya.testvkclient.utils.JSONParser;
+import ru.msinchevskaya.testvkclient.utils.VkItemLoader;
+import ru.msinchevskaya.testvkclient.utils.VkItemLoader.IVkItemLoadListener;
 import ru.msinchevskaya.testvkclient.vkitems.User;
+import ru.msinchevskaya.testvkclient.vkitems.VkItem;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-public class EnterActivity extends Activity {
+public class EnterActivity extends Activity implements IVkItemLoadListener {
 
 	private static final int LOGIN_CODE = 1;
 
@@ -40,33 +34,8 @@ public class EnterActivity extends Activity {
 	}
 
 	private void getUserName(){
-		RequestQueue queue = Volley.newRequestQueue(this);
-		String url = "https://api.vk.com/method/users.get?user_ids=" 
-				+ Account.getInstance(this).getUserId() +
-				"&fields=photo_50&&v=5.2";
-		JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, 
-				new Response.Listener<JSONObject>() {
-
-			@Override
-			public void onResponse(JSONObject response) {
-				User user = null;
-				try {
-					user = (User)JSONParser.parseUser(response).get(0);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				Account.getInstance(getApplicationContext()).setUser(user);
-				startPostActivity();
-			}
-		}, new Response.ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				Log.i(getString(R.string.app_tag), error.toString());
-			}
-		});
-
-		queue.add(jsObjRequest);
+		VkItemLoader loader = VkItemLoader.getInstance(this);
+		loader.loadUser(Account.getInstance(this).getUserId(), this);
 	}
 
 	private void startPostActivity(){
@@ -92,5 +61,19 @@ public class EnterActivity extends Activity {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void loadingSuccess(List<VkItem> listItem) {
+		if (!listItem.isEmpty()){
+			User user = (User)listItem.get(0);
+			Account.getInstance(this).setUser(user);
+			startPostActivity();
+		}
+	}
+
+	@Override
+	public void loadingError(String message) {
+		Log.e(getString(R.string.app_tag), message);
 	}
 }

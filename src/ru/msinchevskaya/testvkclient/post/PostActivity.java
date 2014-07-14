@@ -12,6 +12,7 @@ import ru.msinchevskaya.testvkclient.R.menu;
 import ru.msinchevskaya.testvkclient.auth.Account;
 import ru.msinchevskaya.testvkclient.utils.VkItemLoader;
 import ru.msinchevskaya.testvkclient.utils.VkItemLoader.IVkItemLoadListener;
+import ru.msinchevskaya.testvkclient.vkitems.Post;
 import ru.msinchevskaya.testvkclient.vkitems.User;
 import ru.msinchevskaya.testvkclient.vkitems.VkItem;
 
@@ -55,7 +56,7 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 		setTitle(Account.getInstance(this).getUser().getFullName());
 		
 		VkItemLoader itemLoader = VkItemLoader.getInstance(this);
-		itemLoader.loadPost(0, 0, this);
+		itemLoader.loadPost(0, 10, this);
 				
 	}
 
@@ -82,9 +83,11 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 	}
 
 	@Override
-	public void loadingSuccess(List<VkItem> item) {
-		User user = (User)item.get(0);
-		Log.d(getString(R.string.app_tag), user.getFullName());
+	public void loadingSuccess(List<VkItem> listItem) {
+		for (VkItem item : listItem){
+			Post post = (Post)item;
+			Log.i(getString(R.string.app_tag), "Likes = " + post.getLikes());
+		}
 	}
 
 	@Override

@@ -33,27 +33,67 @@ public class VkItemLoader {
 	}
 	
 	public interface IVkItemLoadListener{
-		public void loadingSuccess(List<VkItem> item);
+		public void loadingSuccess(List<VkItem> listItem);
 		public void loadingError(String message);
 	}
 	
-	public void loadPost(final int ofset, final int count, final IVkItemLoadListener listener){
+	/**
+	 * 
+	 * @param userId
+	 * @param listener
+	 * «агрудает данные о пользователе, отправл€ет callback
+	 */
+	public void loadUser(final String userId, final IVkItemLoadListener listener){
 		RequestQueue queue = Volley.newRequestQueue(mContext);
-//		String url = "https://api.vk.com/method/wall.get?owner_id=" 
-//			+ Account.getInstance(mContext).getUserId() +
-//			"&v=5.2";
-		
 		String url = "https://api.vk.com/method/users.get?user_ids=" 
 				+ Account.getInstance(mContext).getUserId() +
 				"&fields=photo_50&&v=5.2";
+		
+		final Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				try {
+					List<VkItem> listUser = JSONParser.parseUser(response);
+					listener.loadingSuccess(listUser);
+				} catch (JSONException e){
+					listener.loadingError(e.getLocalizedMessage());
+				}
+			}
+		};
+		
+		final Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				  listener.loadingError(error.getLocalizedMessage());
+			}
+		};
+		
+		JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, responseListener, errorListener);
+		queue.add(jsObjRequest);
+	}
+	
+	/**
+	 * 
+	 * @param ofset смещение от первого поста
+	 * @param count количество загружаемых постов
+	 * @param listener 
+	 * «агружает нужное количество постов и отправл€ет callback
+	 */
+	public void loadPost(final int offset, final int count, final IVkItemLoadListener listener){
+		RequestQueue queue = Volley.newRequestQueue(mContext);
+		String url = "https://api.vk.com/method/wall.get?owner_id=" 
+			+ Account.getInstance(mContext).getUserId() + "&offset=" + offset 
+			+ "&count=" + count +
+			"&v=5.2";
 		
 		JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
 			  @Override
 			  public void onResponse(JSONObject response) {
 				  try {
-					JSONParser.parseUser(response);
-					listener.loadingSuccess(JSONParser.parseUser(response));
+					listener.loadingSuccess(JSONParser.parsePosts(response));
 				} catch (JSONException e) {
 					listener.loadingError(e.getLocalizedMessage());
 				}
@@ -68,7 +108,7 @@ public class VkItemLoader {
 			 });
 		
 		queue.add(jsObjRequest);
-		
 	}
+	
 
 }
