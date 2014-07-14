@@ -1,5 +1,7 @@
 package ru.msinchevskaya.testvkclient.post;
 
+import java.util.List;
+
 import org.json.JSONObject;
 
 import ru.msinchevskaya.testvkclient.EnterActivity;
@@ -8,6 +10,10 @@ import ru.msinchevskaya.testvkclient.R.id;
 import ru.msinchevskaya.testvkclient.R.layout;
 import ru.msinchevskaya.testvkclient.R.menu;
 import ru.msinchevskaya.testvkclient.auth.Account;
+import ru.msinchevskaya.testvkclient.utils.VkItemLoader;
+import ru.msinchevskaya.testvkclient.utils.VkItemLoader.IVkItemLoadListener;
+import ru.msinchevskaya.testvkclient.vkitems.User;
+import ru.msinchevskaya.testvkclient.vkitems.VkItem;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,7 +34,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class PostActivity extends ActionBarActivity {
+public class PostActivity extends ActionBarActivity implements IVkItemLoadListener{
 	
 	private Account mAccount;
 	@Override
@@ -37,7 +43,6 @@ public class PostActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_post);
 		mAccount = Account.getInstance(this);
 		RequestQueue queue = Volley.newRequestQueue(this);
-		String url = "http://api.vk.com/oauth/logout" ;
 		
 		Fragment fragmentList = getSupportFragmentManager().findFragmentById(R.id.fragmentList);
 		Fragment fragmentFull = getSupportFragmentManager().findFragmentById(R.id.fragmentFull);
@@ -47,29 +52,11 @@ public class PostActivity extends ActionBarActivity {
 		}
 		else 
 			Log.d(getString(R.string.app_tag), "Phone");
-		//"https://api.vk.com/method/wall.get?owner_id=" 
-		//+ mAccount.getUserId() +
-		//"&v=5.2";
-		
-		
 		setTitle(Account.getInstance(this).getUser().getFullName());
-//		Log.i(getString(R.string.app_tag), url);
-//		JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//
-//			  @Override
-//			  public void onResponse(JSONObject response) {
-//					Log.i(getString(R.string.app_tag), ""+response);
-//					startEnterActivity();
-//			  }
-//			 }, new Response.ErrorListener() {
-//
-//			  @Override
-//			  public void onErrorResponse(VolleyError error) {
-//					Log.i(getString(R.string.app_tag), "error");
-//			  }
-//			 });
-//		
-//		queue.add(jsObjRequest);
+		
+		VkItemLoader itemLoader = VkItemLoader.getInstance(this);
+		itemLoader.loadPost(0, 0, this);
+				
 	}
 
 	@Override
@@ -92,6 +79,17 @@ public class PostActivity extends ActionBarActivity {
 		Intent intent = new Intent(this, EnterActivity.class);
 		startActivity(intent);
 		finish();
+	}
+
+	@Override
+	public void loadingSuccess(List<VkItem> item) {
+		User user = (User)item.get(0);
+		Log.d(getString(R.string.app_tag), user.getFullName());
+	}
+
+	@Override
+	public void loadingError(String message) {
+		Log.d(getString(R.string.app_tag), message);
 	}
 
 }

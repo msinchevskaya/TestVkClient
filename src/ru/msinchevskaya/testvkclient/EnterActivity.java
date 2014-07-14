@@ -1,5 +1,6 @@
 package ru.msinchevskaya.testvkclient;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.android.volley.Request;
@@ -10,9 +11,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import ru.msinchevskaya.testvkclient.auth.Account;
-import ru.msinchevskaya.testvkclient.auth.User;
 import ru.msinchevskaya.testvkclient.post.PostActivity;
 import ru.msinchevskaya.testvkclient.utils.JSONParser;
+import ru.msinchevskaya.testvkclient.vkitems.User;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,7 +49,12 @@ public class EnterActivity extends Activity {
 
 			@Override
 			public void onResponse(JSONObject response) {
-				User user = JSONParser.parseUser(response).get(0);
+				User user = null;
+				try {
+					user = (User)JSONParser.parseUser(response).get(0);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 				Account.getInstance(getApplicationContext()).setUser(user);
 				startPostActivity();
 			}

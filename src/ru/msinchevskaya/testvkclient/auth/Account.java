@@ -1,6 +1,7 @@
 package ru.msinchevskaya.testvkclient.auth;
 
 import ru.msinchevskaya.testvkclient.R;
+import ru.msinchevskaya.testvkclient.vkitems.User;
 import android.content.Context;
 import android.content.SharedPreferences;
 
