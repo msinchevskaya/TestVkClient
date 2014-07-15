@@ -7,8 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import ru.msinchevskaya.testvkclient.vkitems.Post;
 import ru.msinchevskaya.testvkclient.vkitems.User;
 import ru.msinchevskaya.testvkclient.vkitems.VkItem;
@@ -28,7 +26,6 @@ public final class JSONParser {
 			String photoUrl = obj.getString("photo_50");
 			User user = new User(userId, firstName, lastName, photoUrl);
 			listUser.add(user);
-			Log.i("VKClientTag", "user");
 		}
 			return listUser;
 	}
@@ -36,7 +33,7 @@ public final class JSONParser {
 	static List<VkItem> parsePosts(JSONObject jsonObject) throws JSONException {
 		List<VkItem> listPost = new ArrayList<VkItem>();
 		JSONObject object = jsonObject.getJSONObject("response");
-		int count = object.getInt("count");
+//		int count = object.getInt("count");
 		JSONArray items = object.getJSONArray("items");
 		for (int i = 0; i < items.length(); i++){
 			JSONObject obj = items.getJSONObject(i);

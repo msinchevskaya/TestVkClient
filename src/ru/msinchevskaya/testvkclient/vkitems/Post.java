@@ -1,25 +1,55 @@
 package ru.msinchevskaya.testvkclient.vkitems;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Post extends VkItem{
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
+public class Post extends VkItem implements Parcelable{
 	
 	//ќб€зательные параметры
-	private final String id;
-	private final String fromId; //userId
-	private final String text;
-	private final int likes;
-	private final int reposts;
-	private final int comments;
-	private final long dateInMillis; //в миллисекундах
-	private List<String> photoUrl;
+	private String id;
+	private String fromId; //userId
+	private String text;
+	private int likes;
+	private int reposts;
+	private int comments;
+	private String date;
+	private List<String> photoUrl = new ArrayList<String>();
 	private Post post; //может содержать пост, если это репост
-	private final String shortText; //“екст до первого переноса строки
+	private String shortText; //“екст до первого переноса строки
 	
+	
+	public String getId(){
+		return id;
+	}
+	
+	public String getFromId(){
+		return fromId;
+	}
+	
+	public String getText(){
+		return text;
+	}
 	
 	public int getLikes(){
 		return likes;
+	}
+	
+	public int getReposts(){
+		return reposts;
+	}
+	
+	public int getComments(){
+		return comments;
+	}
+	
+	public String getDate(){
+		return date;
 	}
 	
 	public static class Builder { 
@@ -29,11 +59,11 @@ public class Post extends VkItem{
 		private int likes;
 		private int reposts;
 		private int comments;
-		private long dateInMillis; //в миллисекундах
+		private long dateInSec; //в секундах
 
 		
 		//ќпциональные параметры
-		private List<String> photoUrl;
+		private List<String> photoUrl = new ArrayList<String>();
 		private Post post; //может содержать пост, если это репост
 		
 		//—лужебные параметры
@@ -45,15 +75,15 @@ public class Post extends VkItem{
 				int likes, 
 				int reposts, 
 				int comments,
-				long dateInMillis){
+				long dateInSec){
 			this.id = id;
-			this.fromId = id;
+			this.fromId = fromId;
 			this.text = text;
 			this.shortText = text;
 			this.likes = likes;
 			this.reposts = reposts;
 			this.comments = comments;
-			this.dateInMillis = dateInMillis;
+			this.dateInSec = dateInSec;
 		}
 		
 		public Builder listPhoto(List<String> photoUrl){
@@ -79,6 +109,29 @@ public class Post extends VkItem{
 		this.likes = builder.likes;
 		this.reposts = builder.reposts;
 		this.comments = builder.comments;
-		this.dateInMillis = builder.dateInMillis;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+		Date postDate = new Date(builder.dateInSec * 1000);
+		this.date = sdf.format(postDate);
+		this.photoUrl.addAll(builder.photoUrl);
+		this.post = builder.post;
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(id);
+		dest.writeString(fromId);
+		dest.writeString(text);
+		dest.writeString(shortText);
+		dest.writeInt(likes);
+		dest.writeInt(comments);
+		dest.writeInt(reposts);
+		dest.writeString(date);
+		dest.writeStringList(photoUrl);
+		dest.writeParcelable(post, PARCELABLE_WRITE_RETURN_VALUE);
 	}
 }

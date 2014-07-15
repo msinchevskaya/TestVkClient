@@ -9,8 +9,9 @@
     <string name="redirect_uri">https://oauth.vk.com/blank.html</string>
     <string name="title_activity_enter">Авторизация</string>
     <string name="shared_preferences">SharedPreferences</string>
-    <string name="enter">Вход</string>    
+    <string name="enter">Вход</string>
     <string name="logout">Logout</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_full_post">FullPostActivity</string>
 
 </resources>

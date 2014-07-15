@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:padding="10dp"
+    android:orientation="vertical" >
+
+   <LinearLayout 
+        android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		
+    <ImageView
+        android:id="@+id/iv_userImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+
+    <TextView
+        android:id="@+id/tv_userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center_vertical" />
+       
+   </LinearLayout>
+   
+   <TextView
+       android:id="@+id/tv_date"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:padding="10dp"
+       android:text="Date"
+       android:textAppearance="@android:style/TextAppearance.Small" />
+
+   <TextView
+       android:id="@+id/tv_shortText"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:padding="10dp"
+       android:text="Text"
+       android:textAppearance="@android:style/TextAppearance.Medium" />
+<RelativeLayout 
+        android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+    
+          <TextView
+              android:id="@+id/tv_likes"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentLeft="true"
+              android:padding="10dp"
+              android:text="Likes" />
+                    
+          <TextView
+              android:id="@+id/tv_likes_count"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_toRightOf="@id/tv_likes"
+              android:padding="10dp"
+              android:text="5" />
+          
+          <View 
+              android:id="@+id/center_view"
+              android:layout_width="1dp"
+              android:layout_height="1dp"
+              android:layout_centerInParent="true"/>
+          
+          <TextView
+              android:id="@+id/tv_comments_count"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_toRightOf="@id/center_view"
+              android:padding="10dp"
+              android:text="5" />
+
+          <TextView
+              android:id="@+id/tv_comments"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_toLeftOf="@id/center_view"
+              android:padding="10dp"
+              android:text="Comments" />
+          
+          <TextView
+              android:id="@+id/tv_reposts_count"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentRight="true"
+              android:padding="10dp"
+              android:text="5" />
+
+          <TextView
+              android:id="@+id/tv_reposts"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_toLeftOf="@id/tv_reposts_count"
+              android:padding="10dp"
+              android:text="Reposts" />
+          
+</RelativeLayout>
+
+</LinearLayout>
