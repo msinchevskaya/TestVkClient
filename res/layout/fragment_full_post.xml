@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:padding="10dp"
-            android:text="Likes" />
+            android:text="@string/likes" />
 
         <TextView
             android:id="@+id/tv_likes_count"
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/center_view"
             android:padding="10dp"
-            android:text="Comments" />
+            android:text="@string/comments" />
 
         <TextView
             android:id="@+id/tv_reposts_count"
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/tv_reposts_count"
             android:padding="10dp"
-            android:text="Reposts" />
+            android:text="@string/reposts" />
     </RelativeLayout>
 
 </LinearLayout>

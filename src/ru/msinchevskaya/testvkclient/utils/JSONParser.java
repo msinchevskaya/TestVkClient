@@ -12,10 +12,17 @@ import ru.msinchevskaya.testvkclient.vkitems.Post;
 import ru.msinchevskaya.testvkclient.vkitems.User;
 import ru.msinchevskaya.testvkclient.vkitems.VkItem;
 
-public final class JSONParser {
+public class JSONParser {
 	
 	private JSONParser(){}
 	
+	/**
+	 * 
+	 * @param jsonObject
+	 * @return
+	 * @throws JSONException
+	 * Возвращает список пользователей
+	 */
 	static List<VkItem> parseUser(JSONObject jsonObject) throws JSONException{
 		List<VkItem> listUser = new ArrayList<VkItem>();
 		JSONArray array = jsonObject.getJSONArray("response");
@@ -31,6 +38,13 @@ public final class JSONParser {
 			return listUser;
 	}
 	
+	/**
+	 * 
+	 * @param jsonObject
+	 * @return
+	 * @throws JSONException
+	 * Возвращает список постов
+	 */
 	static List<VkItem> parsePosts(JSONObject jsonObject) throws JSONException {
 		List<VkItem> listPost = new ArrayList<VkItem>();
 		JSONObject object = jsonObject.getJSONObject("response");

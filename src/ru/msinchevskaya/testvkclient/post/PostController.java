@@ -3,9 +3,7 @@ package ru.msinchevskaya.testvkclient.post;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-
-public class PostController {
+public final class PostController {
 	
 	private static int postVisible; //Постов отображено
 	private static int totalPost; //Всего постов
@@ -36,6 +34,12 @@ public class PostController {
 		listPostId.add(postId);
 	}
 	
+	/**
+	 * 
+	 * @param postId
+	 * @return
+	 * Возвращает значение - загружен ли уже в ленту пост в указаннымId
+	 */
 	public static boolean isPostExist(String postId){
 		return listPostId.contains(postId);
 	}

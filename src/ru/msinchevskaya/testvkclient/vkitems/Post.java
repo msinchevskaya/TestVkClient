@@ -10,8 +10,6 @@ import android.os.Parcelable;
 
 public class Post extends VkItem implements Parcelable{
 	
-
-	
 	//Обязательные параметры
 	private String id;
 	private String fromId; //userId

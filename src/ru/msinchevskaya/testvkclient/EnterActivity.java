@@ -54,7 +54,7 @@ public class EnterActivity extends Activity implements IVkItemLoadListener {
 				int expiressIn = data.getIntExtra(LoginActivity.INTENT_EXPIRESIN, 0);
 				String userId = data.getStringExtra(LoginActivity.INTENT_USERID);
 				Account.getInstance(this).saveAccountParams(accessToken, expiressIn, userId);
-				getUserName();
+				getUserName(); //Загрузка данных о пользователе
 			}
 			break;
 

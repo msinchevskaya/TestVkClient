@@ -14,5 +14,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_full_post">Полный текст</string>
     <string name="update">Обновить ленту</string>
-
+    
+    <string name="likes">Likes</string>
+    <string name="reposts">Reposts</string>
+   	<string name="comments">Comments</string>
 </resources>

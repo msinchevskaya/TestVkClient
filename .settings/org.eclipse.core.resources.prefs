@@ -1,3 +1,9 @@
 eclipse.preferences.version=1
+encoding//src/ru/msinchevskaya/testvkclient/EnterActivity.java=UTF-8
 encoding//src/ru/msinchevskaya/testvkclient/LoginActivity.java=UTF-8
+encoding//src/ru/msinchevskaya/testvkclient/post/PostActivity.java=UTF-8
+encoding//src/ru/msinchevskaya/testvkclient/post/PostAdapter.java=UTF-8
 encoding//src/ru/msinchevskaya/testvkclient/post/PostController.java=UTF-8
+encoding//src/ru/msinchevskaya/testvkclient/utils/JSONParser.java=UTF-8
+encoding//src/ru/msinchevskaya/testvkclient/utils/VkItemLoader.java=UTF-8
+encoding//src/ru/msinchevskaya/testvkclient/vkitems/VkItem.java=UTF-8

@@ -46,6 +46,10 @@ public class VkItemLoader {
 		public void loadingError(String message);
 	}
 	
+	/**
+	 * 
+	 * @return LOADED РµСЃР»Рё РёРґРµС‚ Р·Р°РіСЂСѓР·РєР° РёР»Рё STOPPED РµСЃР»Рё Р·Р°РіСЂСѓР·РѕРє РЅРµС‚
+	 */
 	public int getStatus(){
 		return status;
 	}
@@ -53,7 +57,7 @@ public class VkItemLoader {
 	 * 
 	 * @param userId
 	 * @param listener
-	 * Загрудает данные о пользователе, отправляет callback
+	 * В«вЂЎвЂћпЈїГ›вЂ°вЂЎГ‚Гљ вЂ°вЂЎГЊГЊЛљГ‚ Г“ Г”Г“ГЋВёГЃГ“вЂљвЂЎГљГ‚ГЋГ‚, Г“ГљГ”пЈївЂЎвЂљГЋЛ‡Г‚Гљ callback
 	 */
 	public void loadUser(final String userId, final IVkItemLoadListener listener){
 		
@@ -94,10 +98,10 @@ public class VkItemLoader {
 	
 	/**
 	 * 
-	 * @param ofset смещение от первого поста
-	 * @param count количество загружаемых постов
+	 * @param ofset Г’ГЏГ‚ЛГ‚ГЊГ‹Г‚ Г“Гљ Г”Г‚пЈївЂљГ“вЂћГ“ Г”Г“Г’ГљвЂЎ
+	 * @param count ГЌГ“ГЋГ‹ЛњГ‚Г’ГљвЂљГ“ ГЃвЂЎвЂћпЈїГ›ГЉвЂЎГ‚ГЏЛљД± Г”Г“Г’ГљГ“вЂљ
 	 * @param listener 
-	 * Загружает нужное количество постов и отправляет callback
+	 * В«вЂЎвЂћпЈїГ›ГЉвЂЎГ‚Гљ ГЊГ›ГЉГЊГ“Г‚ ГЌГ“ГЋГ‹ЛњГ‚Г’ГљвЂљГ“ Г”Г“Г’ГљГ“вЂљ Г‹ Г“ГљГ”пЈївЂЎвЂљГЋЛ‡Г‚Гљ callback
 	 */
 	public void loadPost(final int offset, final int count, final int mode,final IVkItemLoadListener listener){
 		
@@ -117,7 +121,7 @@ public class VkItemLoader {
 					  List<VkItem> listPost = JSONParser.parsePosts(response);
 					  switch (mode){
 					  case MODE_LOAD:
-						  listener.loadingSuccess(listPost);
+						  listener.loadingSuccess(listPost); 
 						  break;
 					  case MODE_UPDATE:
 						  listener.updateSuccess(listPost);

@@ -109,7 +109,7 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 				listPostFragment.update(listPost);
 				return;
 			}
-			listPost.add(0, post);
+			listPost.add(0, post); //Добавляем посты в начало списка
 			PostController.addPost(post.getId());
 		}
 		PostController.setPostVisible(listPost.size());
@@ -158,7 +158,4 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 		FragmentFullPost fullPost = new FragmentFullPost();
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentFull, fullPost).commit();
 	}
-
-
-
 }

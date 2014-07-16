@@ -17,6 +17,7 @@ public class LoginActivity extends Activity {
 	public static final String INTENT_USERID = "userid";
 	
 	private Context mContext;
+	private boolean clearFlag = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +31,32 @@ public class LoginActivity extends Activity {
 		
 		Log.d(getString(R.string.app_tag), url);	
 		
-	    CookieSyncManager.createInstance(mContext);
-	    CookieManager cookieManager = CookieManager.getInstance();
-	    cookieManager.removeAllCookie();
+
 		WebView webview = (WebView) findViewById(R.id.webview);
 		webview.loadUrl(url);
 		webview.setWebViewClient(new AuthWebViewClient());		
 	}
+	
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		clearFlag = savedInstanceState.getBoolean("ClearCookies");
+	}
+	
+	protected void onResume() {
+	    super.onResume();
+	    if (clearFlag) { //Не очищать куки при повороте активити
+		    CookieSyncManager.createInstance(mContext);
+		    CookieManager cookieManager = CookieManager.getInstance();
+		    cookieManager.removeAllCookie();
+	    }
+	  }
 	
 	private void parseUrl(String url){
 		if (url.contains("error")){
 			Log.e(getString(R.string.app_tag), url);
 			sendErrorResult();
 		}
-		
+		//Разбиваем строку на токены по регулярному выражению
 		String tokens[] = url.split("[&=]");
 		
 		String accessToken = tokens[1];
@@ -71,6 +84,11 @@ public class LoginActivity extends Activity {
 		setResult(RESULT_OK, intent);
 		finish();
 	}
+	
+	protected void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    outState.putBoolean("ClearCookies", false);
+	  }
 	
 	private class AuthWebViewClient extends WebViewClient {
 		

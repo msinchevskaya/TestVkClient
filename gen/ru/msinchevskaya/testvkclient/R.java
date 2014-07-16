@@ -1272,10 +1272,13 @@ containing a value of this type.
         public static final int app_name=0x7f0a000e;
         public static final int app_tag=0x7f0a0010;
         public static final int client_id=0x7f0a0011;
+        public static final int comments=0x7f0a001d;
         public static final int enter=0x7f0a0016;
         public static final int hello_world=0x7f0a0018;
+        public static final int likes=0x7f0a001b;
         public static final int logout=0x7f0a0017;
         public static final int redirect_uri=0x7f0a0013;
+        public static final int reposts=0x7f0a001c;
         public static final int scope=0x7f0a0012;
         public static final int screen_type=0x7f0a000d;
         public static final int shared_preferences=0x7f0a0015;
