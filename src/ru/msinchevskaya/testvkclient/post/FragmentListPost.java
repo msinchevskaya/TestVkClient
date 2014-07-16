@@ -11,11 +11,13 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class FragmentListPost extends Fragment{
@@ -28,7 +30,7 @@ public class FragmentListPost extends Fragment{
 		public void loadUpdates();
 		public void onPostClick(int position);
 	}
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,6 +57,16 @@ public class FragmentListPost extends Fragment{
 					long id) {
 				postListener.onPostClick(position);
 			}
+		});
+
+		Button btnUpdate = (Button)contentView.findViewById(R.id.btn_update);
+		btnUpdate.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View view) {
+				postListener.loadUpdates();
+			}
+			
 		});
 		return contentView;
 	}
@@ -88,6 +100,4 @@ public class FragmentListPost extends Fragment{
 		mAdapter = null;
 		lvPost = null;
 	}
-
-
 }

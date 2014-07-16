@@ -7,9 +7,10 @@ import java.util.List;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 public class Post extends VkItem implements Parcelable{
+	
+
 	
 	//ќб€зательные параметры
 	private String id;
@@ -34,6 +35,10 @@ public class Post extends VkItem implements Parcelable{
 	
 	public String getText(){
 		return text;
+	}
+	
+	public String getShortText(){
+		return shortText;
 	}
 	
 	public int getLikes(){
@@ -75,7 +80,6 @@ public class Post extends VkItem implements Parcelable{
 		private Post post; //может содержать пост, если это репост
 		
 		//—лужебные параметры
-		private String shortText; //“екст до первого переноса строки
 		
 		public Builder(String id, 
 				String fromId, 
@@ -87,7 +91,6 @@ public class Post extends VkItem implements Parcelable{
 			this.id = id;
 			this.fromId = fromId;
 			this.text = text;
-			this.shortText = text;
 			this.likes = likes;
 			this.reposts = reposts;
 			this.comments = comments;
@@ -113,7 +116,7 @@ public class Post extends VkItem implements Parcelable{
 		this.id = builder.id;
 		this.fromId = builder.fromId;
 		this.text = builder.text;
-		this.shortText = builder.text;
+		this.shortText = builder.text.split("\n")[0];
 		this.likes = builder.likes;
 		this.reposts = builder.reposts;
 		this.comments = builder.comments;
@@ -121,7 +124,6 @@ public class Post extends VkItem implements Parcelable{
 		Date postDate = new Date(builder.dateInSec * 1000);
 		this.date = sdf.format(postDate);
 		this.photoUrl.addAll(builder.photoUrl);
-		this.photoUrl.add("Jopa");
 		this.post = builder.post;
 	}
 

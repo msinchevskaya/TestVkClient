@@ -13,9 +13,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import android.content.Context;
-import android.util.Log;
-
-import ru.msinchevskaya.testvkclient.R;
 import ru.msinchevskaya.testvkclient.auth.Account;
 import ru.msinchevskaya.testvkclient.vkitems.VkItem;
 
@@ -27,6 +24,9 @@ public class VkItemLoader {
 	private int status;
 	public static final int LOADED = 100;
 	public static final int STOPPED = 101;
+	
+	public static final int MODE_LOAD = 102;
+	public static final int MODE_UPDATE = 103;
 	
 	
 	private VkItemLoader(Context context){
@@ -42,6 +42,7 @@ public class VkItemLoader {
 	
 	public interface IVkItemLoadListener{
 		public void loadingSuccess(List<VkItem> listItem);
+		public void updateSuccess(List<VkItem> listItem);
 		public void loadingError(String message);
 	}
 	
@@ -66,7 +67,7 @@ public class VkItemLoader {
 		final Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
 
 			@Override
-			public void onResponse(JSONObject response) {
+			public void onResponse(final JSONObject response) {
 				try {
 					List<VkItem> listUser = JSONParser.parseUser(response);
 					listener.loadingSuccess(listUser);
@@ -98,78 +99,47 @@ public class VkItemLoader {
 	 * @param listener 
 	 * Загружает нужное количество постов и отправляет callback
 	 */
-	public void loadPost(final int offset, final int count, final IVkItemLoadListener listener){
+	public void loadPost(final int offset, final int count, final int mode,final IVkItemLoadListener listener){
 		
 		status = LOADED;
 		
 		RequestQueue queue = Volley.newRequestQueue(mContext);
 		String url = "https://api.vk.com/method/wall.get?owner_id=" 
 			+ Account.getInstance(mContext).getUserId() + "&offset=" + offset 
-			+ "&count=" + count +
+			+ "&count=" + count + "&filter=owner" +
 			"&v=5.2";
 		
 		JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
 			  @Override
-			  public void onResponse(JSONObject response) {
+			  public void onResponse(final JSONObject response) {
 				  try {
-					List<VkItem> listPost = JSONParser.parsePosts(response);
-					listener.loadingSuccess(listPost);
-					status = STOPPED;
-				} catch (JSONException e) {
-					listener.loadingError(e.getLocalizedMessage());
-					status = STOPPED;
-				}
-					
+					  List<VkItem> listPost = JSONParser.parsePosts(response);
+					  switch (mode){
+					  case MODE_LOAD:
+						  listener.loadingSuccess(listPost);
+						  break;
+					  case MODE_UPDATE:
+						  listener.updateSuccess(listPost);
+						  break;
+					  default:
+						  break;
+						}
+					  status = STOPPED;
+				  } catch (JSONException e) {
+					  listener.loadingError(e.getLocalizedMessage());
+					  status = STOPPED;
+				  }			
 			  }
-			 }, new Response.ErrorListener() {
+		}, new Response.ErrorListener() {
 
-				 @Override
-				 public void onErrorResponse(VolleyError error) {
-					 listener.loadingError(error.getLocalizedMessage());
-					 status = STOPPED;
-				 }
-			 });
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				listener.loadingError(error.getLocalizedMessage());
+				status = STOPPED;
+			}
+		});
 		
 		queue.add(jsObjRequest);
 	}
-	
-	public void loadComments(final String postId, int count, final IVkItemLoadListener listener){
-		status = LOADED;
-		
-		RequestQueue queue = Volley.newRequestQueue(mContext);
-		String url = "https://api.vk.com/method/wall.getComments?owner_id=" 
-			+ Account.getInstance(mContext).getUserId() + "&post_id=" + postId 
-			+ "&count=" + count +
-			"&v=5.2";
-		
-		Log.d(mContext.getString(R.string.app_tag), url);
-		
-		JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-			  @Override
-			  public void onResponse(JSONObject response) {
-//				  try {
-					Log.d(mContext.getString(R.string.app_tag), response.toString());
-					status = STOPPED;
-//				} catch (JSONException e) {
-//					listener.loadingError(e.getLocalizedMessage());
-//					status = STOPPED;
-//				}
-					
-			  }
-			 }, new Response.ErrorListener() {
-
-				 @Override
-				 public void onErrorResponse(VolleyError error) {
-					 listener.loadingError(error.getLocalizedMessage());
-					 status = STOPPED;
-				 }
-			 });
-		
-		queue.add(jsObjRequest);
-		
-	}
-	
-
 }

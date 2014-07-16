@@ -12,6 +12,7 @@
     <string name="enter">Вход</string>
     <string name="logout">Logout</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_full_post">FullPostActivity</string>
+    <string name="title_activity_full_post">Полный текст</string>
+    <string name="update">Обновить ленту</string>
 
 </resources>

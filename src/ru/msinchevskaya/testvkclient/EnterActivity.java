@@ -76,4 +76,9 @@ public class EnterActivity extends Activity implements IVkItemLoadListener {
 	public void loadingError(String message) {
 		Log.e(getString(R.string.app_tag), message);
 	}
+
+	@Override
+	public void updateSuccess(List<VkItem> listItem) {
+		
+	}
 }

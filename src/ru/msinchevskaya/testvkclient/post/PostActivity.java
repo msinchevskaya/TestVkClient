@@ -46,10 +46,11 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 		super.onResume();
 		if (listPost.isEmpty()){
 			VkItemLoader itemLoader = VkItemLoader.getInstance(this);
-			itemLoader.loadPost(0, 20, this);
+			itemLoader.loadPost(0, PostController.POST_COUNT, VkItemLoader.MODE_LOAD, this);
 		}
 		else {		
 			FragmentListPost listPostFragment = (FragmentListPost) getSupportFragmentManager().findFragmentById(R.id.fragmentList);
+			listPostFragment.setRetainInstance(true);
 			listPostFragment.update(listPost);
 		}
 	}
@@ -87,7 +88,9 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 		for (VkItem item : listItem){
 			Post post = (Post)item;
 			listPost.add(post);
+			PostController.addPost(post.getId());
 		}
+		PostController.setPostVisible(listPost.size());
 		FragmentListPost listPostFragment = (FragmentListPost) getSupportFragmentManager().findFragmentById(R.id.fragmentList);
 		listPostFragment.update(listPost);
 	}
@@ -96,17 +99,44 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 	public void loadingError(String message) {
 		Log.d(getString(R.string.app_tag), message);
 	}
+	
+	@Override
+	public void updateSuccess(List<VkItem> listItem) {
+		for (VkItem item : listItem){
+			Post post = (Post)item;
+			if (PostController.isPostExist(post.getId())){
+				FragmentListPost listPostFragment = (FragmentListPost) getSupportFragmentManager().findFragmentById(R.id.fragmentList);
+				listPostFragment.update(listPost);
+				return;
+			}
+			listPost.add(0, post);
+			PostController.addPost(post.getId());
+		}
+		PostController.setPostVisible(listPost.size());
+		loadUpdates();
+	}
 
 	@Override
 	public void loadNext() {
 		if (VkItemLoader.getInstance(this).getStatus() == VkItemLoader.STOPPED){
 			VkItemLoader itemLoader = VkItemLoader.getInstance(this);
-			itemLoader.loadPost(20, 40, this);
+			if (PostController.getPostVisible() != PostController.getTotalPost()){
+				if (PostController.getPostVisible() + PostController.POST_COUNT < PostController.getTotalPost()){
+					itemLoader.loadPost(PostController.getPostVisible(), PostController.POST_COUNT, VkItemLoader.MODE_LOAD, this);
+				}
+				else {
+					itemLoader.loadPost(PostController.getPostVisible(), PostController.getTotalPost() - PostController.getPostVisible(), VkItemLoader.MODE_LOAD, this);
+				}
+			}
 		}
 	}
 
 	@Override
 	public void loadUpdates() {
+		if (VkItemLoader.getInstance(this).getStatus() == VkItemLoader.STOPPED){
+			VkItemLoader itemLoader = VkItemLoader.getInstance(this);
+			itemLoader.loadPost(0, PostController.POST_COUNT, VkItemLoader.MODE_UPDATE, this);
+		}
 	}
 
 	@Override
@@ -128,5 +158,7 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 		FragmentFullPost fullPost = new FragmentFullPost();
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentFull, fullPost).commit();
 	}
+
+
 
 }
