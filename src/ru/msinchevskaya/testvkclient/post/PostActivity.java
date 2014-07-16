@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class PostActivity extends ActionBarActivity implements IVkItemLoadListener, IListPostListener{
 	
@@ -98,6 +99,7 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 	@Override
 	public void loadingError(String message) {
 		Log.d(getString(R.string.app_tag), message);
+		Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_LONG).show();
 	}
 	
 	@Override
@@ -155,7 +157,10 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 	}
 	
 	private void addFullPostFragment(Post post){
-		FragmentFullPost fullPost = new FragmentFullPost();
+		FragmentFullPost fullPost = new FragmentFullPost();		
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(PostActivity.INTENT_POST, post);
+		fullPost.setArguments(bundle);
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentFull, fullPost).commit();
 	}
 }

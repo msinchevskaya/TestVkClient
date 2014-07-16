@@ -18,4 +18,5 @@
     <string name="likes">Likes</string>
     <string name="reposts">Reposts</string>
    	<string name="comments">Comments</string>
+   	<string name="network_error">Ошибка загрузки. Проверьте подключение к сети</string>
 </resources>
