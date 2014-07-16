@@ -32,7 +32,7 @@
         <activity android:name=".post.PostActivity" >
         </activity>
         <activity
-            android:name=".FullPostActivity"
+            android:name="ru.msinchevskaya.testvkclient.post.FullPostActivity"
             android:label="@string/title_activity_full_post" >
         </activity>
     </application>

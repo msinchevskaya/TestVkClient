@@ -20,6 +20,8 @@ import android.view.MenuItem;
 
 public class PostActivity extends ActionBarActivity implements IVkItemLoadListener, IListPostListener{
 	
+	public static final String INTENT_POST = "post";
+	
 	private Account mAccount;
 	private ArrayList<Post> listPost = new ArrayList<Post>();
 	
@@ -110,14 +112,21 @@ public class PostActivity extends ActionBarActivity implements IVkItemLoadListen
 	@Override
 	public void onPostClick(int position) {
 		Log.d(getString(R.string.app_tag), listPost.get(position).getText());
+		if ("phone".equals(getString(R.string.screen_type)))
+			startFullPostActivity(listPost.get(position));
+		else
+			addFullPostFragment(listPost.get(position));
 	}
 	
 	private void startFullPostActivity(Post post){
-		Intent intent = new Intent();
+		Intent intent = new Intent(this, FullPostActivity.class);
+		intent.putExtra(INTENT_POST, post);
+		startActivity(intent);
 	}
 	
 	private void addFullPostFragment(Post post){
-		
+		FragmentFullPost fullPost = new FragmentFullPost();
+		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentFull, fullPost).commit();
 	}
 
 }

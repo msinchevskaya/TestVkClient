@@ -52,6 +52,14 @@ public class Post extends VkItem implements Parcelable{
 		return date;
 	}
 	
+	public List<String> getListPhotos(){
+		return photoUrl;
+	}
+	
+	public Post getPost(){
+		return post;
+	}
+	
 	public static class Builder { 
 		private String id;
 		private String fromId; //userId
@@ -113,6 +121,7 @@ public class Post extends VkItem implements Parcelable{
 		Date postDate = new Date(builder.dateInSec * 1000);
 		this.date = sdf.format(postDate);
 		this.photoUrl.addAll(builder.photoUrl);
+		this.photoUrl.add("Jopa");
 		this.post = builder.post;
 	}
 
@@ -134,4 +143,29 @@ public class Post extends VkItem implements Parcelable{
 		dest.writeStringList(photoUrl);
 		dest.writeParcelable(post, PARCELABLE_WRITE_RETURN_VALUE);
 	}
+	
+	  public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {
+		    // распаковываем объект из Parcel
+		    public Post createFromParcel(Parcel in) {
+		      return new Post(in);
+		    }
+
+		    public Post[] newArray(int size) {
+		      return new Post[size];
+		    }
+		  };
+		  
+			private Post(Parcel in){
+				this.id = in.readString();
+				this.fromId = in.readString();
+				this.text = in.readString();
+				this.shortText = in.readString();
+				this.likes = in.readInt();
+				this.reposts = in.readInt();
+				this.comments = in.readInt();
+				this.date = in.readString();
+				in.readStringList(this.photoUrl);
+				this.post = in.readParcelable(new ClassLoader(){});
+			}
+
 }

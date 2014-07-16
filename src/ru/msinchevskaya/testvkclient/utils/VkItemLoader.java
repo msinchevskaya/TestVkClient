@@ -13,7 +13,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import android.content.Context;
+import android.util.Log;
 
+import ru.msinchevskaya.testvkclient.R;
 import ru.msinchevskaya.testvkclient.auth.Account;
 import ru.msinchevskaya.testvkclient.vkitems.VkItem;
 
@@ -130,6 +132,43 @@ public class VkItemLoader {
 			 });
 		
 		queue.add(jsObjRequest);
+	}
+	
+	public void loadComments(final String postId, int count, final IVkItemLoadListener listener){
+		status = LOADED;
+		
+		RequestQueue queue = Volley.newRequestQueue(mContext);
+		String url = "https://api.vk.com/method/wall.getComments?owner_id=" 
+			+ Account.getInstance(mContext).getUserId() + "&post_id=" + postId 
+			+ "&count=" + count +
+			"&v=5.2";
+		
+		Log.d(mContext.getString(R.string.app_tag), url);
+		
+		JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+			  @Override
+			  public void onResponse(JSONObject response) {
+//				  try {
+					Log.d(mContext.getString(R.string.app_tag), response.toString());
+					status = STOPPED;
+//				} catch (JSONException e) {
+//					listener.loadingError(e.getLocalizedMessage());
+//					status = STOPPED;
+//				}
+					
+			  }
+			 }, new Response.ErrorListener() {
+
+				 @Override
+				 public void onErrorResponse(VolleyError error) {
+					 listener.loadingError(error.getLocalizedMessage());
+					 status = STOPPED;
+				 }
+			 });
+		
+		queue.add(jsObjRequest);
+		
 	}
 	
 
